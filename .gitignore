@@ -1,0 +1,41 @@
+# Godot
+.godot/
+*.import
+*.uid
+
+# Export
+export_presets.cfg
+*.export
+*.pck
+*.zip
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Python (server)
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+.env
+venv/
+.venv/
+
+# Data
+data/
+*.db
+
+# Dev logs
+.godot-dev-logs/
+
+# Claude settings
+.claude/

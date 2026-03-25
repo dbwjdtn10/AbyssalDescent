@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://c1a2b3main"]
+
+[ext_resource type="Script" path="res://scripts/main_scene.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/dungeon/ai_dungeon_builder.gd" id="2_builder"]
+[ext_resource type="Script" path="res://scripts/npc/npc_manager.gd" id="3_npcmgr"]
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 1
+background_color = Color(0.05, 0.03, 0.08, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.15, 0.12, 0.2, 1)
+ambient_light_energy = 0.3
+fog_enabled = true
+fog_light_color = Color(0.1, 0.08, 0.15, 1)
+fog_density = 0.02
+fog_aerial_perspective = 0.5
+ssao_enabled = true
+ssao_radius = 2.0
+ssao_intensity = 2.0
+
+[node name="Main" type="Node"]
+script = ExtResource("1_main")
+
+[node name="World" type="Node3D" parent="."]
+
+[node name="AIDungeonBuilder" type="Node3D" parent="World"]
+script = ExtResource("2_builder")
+
+[node name="NPCManager" type="Node" parent="World"]
+script = ExtResource("3_npcmgr")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="World"]
+transform = Transform3D(0.866, -0.433, 0.25, 0, 0.5, 0.866, -0.5, -0.75, 0.433, 0, 20, 0)
+light_color = Color(0.6, 0.65, 0.8, 1)
+light_energy = 0.4
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="World"]
+environment = SubResource("Environment_1")
+
+[node name="MainCamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 15)
+current = false

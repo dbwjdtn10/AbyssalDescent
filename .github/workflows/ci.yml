@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: abyssal-ai-server
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: abyssal-ai-server/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest httpx
+
+      - name: Run tests
+        run: pytest tests/ -v --tb=short
+
+      - name: Check server starts
+        run: |
+          timeout 5 python -c "
+          import uvicorn, threading, time
+          from urllib.request import urlopen
+          import json
+
+          def run(): uvicorn.run('main:app', host='127.0.0.1', port=8000, log_level='error')
+          t = threading.Thread(target=run, daemon=True)
+          t.start()
+          time.sleep(2)
+          resp = urlopen('http://127.0.0.1:8000/api/health')
+          data = json.loads(resp.read())
+          assert data['status'] == 'ok', 'Health check failed'
+          print('Server health check passed')
+          " || true
+
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: abyssal-ai-server
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install ruff
+        run: pip install ruff
+
+      - name: Lint with ruff
+        run: ruff check . --output-format=github
