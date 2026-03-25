@@ -79,5 +79,6 @@ move_right={
 
 [rendering]
 
+renderer/rendering_method="gl_compatibility"
 anti_aliasing/quality/msaa_3d=2
 environment/defaults/default_clear_color=Color(0.05, 0.03, 0.08, 1)
